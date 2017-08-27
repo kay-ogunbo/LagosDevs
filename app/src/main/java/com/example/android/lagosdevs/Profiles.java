@@ -9,10 +9,7 @@ public class Profiles {
     private String userLogin;
     private String userImage;
     private String userUrl;
-    private String followersCnt;
-    private String followingCnt;
-    private String fullName;
-    private String repoCnt;
+
 
 
     public Profiles(String login, String avatar, String gitURL) {
@@ -35,19 +32,4 @@ public class Profiles {
         return userUrl;
     }
 
-    public String getFollowersCnt() {
-        return followersCnt;
-    }
-
-    public String getFollowingCnt() {
-        return followingCnt;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public String getRepoCnt() {
-        return repoCnt;
-    }
 }
