@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#352D2A"
+    android:scrollbars="vertical"
     tools:context="com.example.android.lagosdevs.DetailProfile">
+
+<RelativeLayout
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 
     <com.mikhaellopez.circularimageview.CircularImageView
@@ -40,8 +48,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/profileFullName"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:textColor="#FFFFFF"
         android:textSize="15dp"
@@ -142,3 +150,4 @@
 
 
 </RelativeLayout>
+</ScrollView>
