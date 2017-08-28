@@ -107,7 +107,10 @@
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                tools:text="110"/>
+                tools:text="110"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
             <TextView
                 android:id="@+id/profile_followers_text"
                 android:layout_width="match_parent"
@@ -145,6 +148,38 @@
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"/>
         </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/url_layout"
+        android:layout_below="@+id/details"
+        android:orientation="horizontal"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:clickable="true">
+
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="16dp"
+                android:id="@+id/url_logo"
+                android:src="@drawable/git_logo"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                tools:text="Profile URL"
+                android:text="URL"
+                android:textSize="20sp"
+                android:padding="8dp"
+                android:textColor="#FFFFFF"/>
+
+
 
     </LinearLayout>
 
