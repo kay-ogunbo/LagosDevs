@@ -94,6 +94,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.DataView
             Intent i = new Intent(context, DetailProfile.class);
             i.putExtra(appConstant.API_USER_NAME, profiles.getUserLogin());
             i.putExtra(appConstant.API_AVATAR_URL, profiles.getUserImage());
+            i.putExtra(appConstant.API_PROFILE_URL, profiles.getUserUrl());
             context.startActivity(i);
 
 

@@ -3,6 +3,8 @@ package com.example.android.lagosdevs;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,14 @@ import org.json.JSONObject;
 public class DetailProfile extends AppCompatActivity {
     private static final String TAG = DetailProfile.class.getSimpleName();
 
+    TextView profileName;
+    CircularImageView profileImage;
+    TextView profileUserID;
+    TextView profileRepos;
+    TextView profileFFs;
+    TextView profileFollowing;
+    TextView profileUserURL;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -36,23 +46,26 @@ public class DetailProfile extends AppCompatActivity {
 
         setContentView(R.layout.activity_detail_profile);
 
-        final TextView profileName = (TextView) findViewById(R.id.profileFullName);
-        final CircularImageView profileImage  = (CircularImageView) findViewById(R.id.profileUserImg);
-        final TextView profileUserID = (TextView) findViewById(R.id.profileUserID);
-        final TextView profileRepos = (TextView) findViewById(R.id.profile_repos_no);
-        final TextView profileFFs = (TextView) findViewById(R.id.profile_followers_no);
-        final TextView profileFollowing = (TextView) findViewById(R.id.profile_following_no);
+        profileName = (TextView) findViewById(R.id.profileFullName);
+        profileImage  = (CircularImageView) findViewById(R.id.profileUserImg);
+        profileUserID = (TextView) findViewById(R.id.profileUserID);
+        profileRepos = (TextView) findViewById(R.id.profile_repos_no);
+        profileFFs = (TextView) findViewById(R.id.profile_followers_no);
+        profileFollowing = (TextView) findViewById(R.id.profile_following_no);
+        profileUserURL = (TextView) findViewById(R.id.git_url);
 
         // Retrieve saved data from intent action.
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         final String userProfileId = intent.getStringExtra(appConstant.API_USER_NAME);
         final String userProfilePic = intent.getStringExtra(appConstant.API_AVATAR_URL);
+        final String profileURL = intent.getStringExtra(appConstant.API_PROFILE_URL);
 
         // Create the user URL by combining the base URL and the selected user IDl
         final String url = appConstant.BASE_URL+ "/users/" + userProfileId;
 
-        // Parse the user id
+        // Parse the user id and URL
         profileUserID.setText("@"+userProfileId);
+        profileUserURL.setText(profileURL);
 
         // Get the user image using picasso library
         Picasso.with(this)
@@ -87,6 +100,22 @@ public class DetailProfile extends AppCompatActivity {
             }
     });
         requestQueue.add(objectRequest);
+
+        // Create listener for the Share button
+        Button share = (Button) findViewById(R.id.btn_share);
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Sharing: GitHub Awesome Developer!");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "Check out this awesome developer @" + userProfileId +
+                        ", @" + profileURL);
+                startActivity(Intent.createChooser(shareIntent,"Share using"));
+            }
+        });
+
 
 
     }
