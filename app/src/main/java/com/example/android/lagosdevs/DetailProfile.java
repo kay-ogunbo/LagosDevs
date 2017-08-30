@@ -1,6 +1,9 @@
 package com.example.android.lagosdevs;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -63,9 +66,8 @@ public class DetailProfile extends AppCompatActivity {
         // Create the user URL by combining the base URL and the selected user IDl
         final String url = appConstant.BASE_URL+ "/users/" + userProfileId;
 
-        // Parse the user id and URL
+        // Parse the user id
         profileUserID.setText("@"+userProfileId);
-        profileUserURL.setText(profileURL);
 
         // Get the user image using picasso library
         Picasso.with(this)
@@ -101,18 +103,30 @@ public class DetailProfile extends AppCompatActivity {
     });
         requestQueue.add(objectRequest);
 
+        // URL Listener
+        profileUserURL.setText(profileURL);
+        profileUserURL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(intent.ACTION_VIEW, Uri.parse(profileURL));
+                startActivity(intent1);
+            }
+        });
+
         // Create listener for the Share button
         Button share = (Button) findViewById(R.id.btn_share);
         share.setOnClickListener(new View.OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
 
                 Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Sharing: GitHub Awesome Developer!");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Sharing: GitHub profile for @"+userProfileId);
                 shareIntent.putExtra(Intent.EXTRA_TEXT, "Check out this awesome developer @" + userProfileId +
-                        ", @" + profileURL);
+                        ", \n at " + profileURL + " \n");
                 startActivity(Intent.createChooser(shareIntent,"Share using"));
+
             }
         });
 

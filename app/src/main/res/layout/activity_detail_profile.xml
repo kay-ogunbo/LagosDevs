@@ -180,7 +180,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/url_logo"
-                android:src="@drawable/git_logo" />
+                android:src="@drawable/git_logo2" />
 
             <TextView
                 android:id="@+id/git_url"
