@@ -7,24 +7,29 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Ogunbowale on 8/20/2017.
  */
 
-public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.DataViewHolder> {
+public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.DataViewHolder> implements Filterable {
 
     private static final String TAG = ProfileAdapter.class.getSimpleName();
     public static final String KEY_NAME = "name";
     private List<Profiles> profileLists;
+    private List<Profiles> mFilteredList;
     private Context context;
     final private ListItemClickListner mOnClickListner;
+
 
     public interface ListItemClickListner{
         void onListItemClick(int clickedItemIndex);
@@ -33,6 +38,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.DataView
 
     public ProfileAdapter(List<Profiles> profileLists, ListItemClickListner listner) {
         this.profileLists = profileLists;
+        this.mFilteredList =  profileLists;
         mOnClickListner = listner;
     }
 
@@ -71,6 +77,38 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.DataView
         return profileLists.size();
     }
 
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+
+                String charString =  constraint.toString();
+                if (charString.isEmpty()){
+                    profileLists = mFilteredList;
+                } else {
+
+                    List<Profiles> filteredList = new ArrayList<>();
+                    for (Profiles profiles : mFilteredList){
+                        if (profiles.getUserLogin().toLowerCase().contains(charString)){
+                            filteredList.add(profiles);
+                        }
+                    }
+                    profileLists = filteredList;
+                }
+                FilterResults filteredResults = new FilterResults();
+                filteredResults.values = profileLists;
+                return filteredResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                profileLists = (List<Profiles>) results.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
+
     public class DataViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener{
 
@@ -96,10 +134,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.DataView
             i.putExtra(appConstant.API_AVATAR_URL, profiles.getUserImage());
             i.putExtra(appConstant.API_PROFILE_URL, profiles.getUserUrl());
             context.startActivity(i);
-
-
-
-
 
         }
     }

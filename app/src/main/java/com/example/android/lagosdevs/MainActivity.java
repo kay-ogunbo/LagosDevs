@@ -2,9 +2,14 @@ package com.example.android.lagosdevs;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -24,9 +29,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements ProfileAdapter.ListItemClickListner {
 
     private static final String GIT_URL = "https://api.github.com/search/users?q=location:lagos+language:java";
-    String urlDetails;
-    private Toast mToast;
-
 
 
     private RecyclerView recyclerView;
@@ -41,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements ProfileAdapter.Li
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -52,6 +57,38 @@ public class MainActivity extends AppCompatActivity implements ProfileAdapter.Li
 
         retrieveData();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        MenuItem search = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
+        search(searchView);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void search(SearchView searchView){
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return true;
+            }
+        });
     }
 
     private void retrieveData() {
@@ -101,7 +138,5 @@ public class MainActivity extends AppCompatActivity implements ProfileAdapter.Li
     public void onListItemClick(int clickedItemIndex) {
 
     }
-
-
 
 }
