@@ -127,6 +127,7 @@ public class DetailProfile extends AppCompatActivity {
                         ", \n at " + profileURL + " \n");
                 startActivity(Intent.createChooser(shareIntent,"Share using"));
 
+
             }
         });
 

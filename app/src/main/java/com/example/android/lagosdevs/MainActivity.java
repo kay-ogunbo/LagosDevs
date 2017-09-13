@@ -1,6 +1,5 @@
 package com.example.android.lagosdevs;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +9,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -28,20 +28,18 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ProfileAdapter.ListItemClickListner {
 
+    public static final List<Profiles> profilesLists = new ArrayList<>();
     private static final String GIT_URL = "https://api.github.com/search/users?q=location:lagos+language:java";
-
-
+    ProgressBar mProgressBar;
     private RecyclerView recyclerView;
     private ProfileAdapter adapter;
-    public static final List<Profiles> profilesLists = new ArrayList<>();
     private RecyclerView.LayoutManager layoutManager;
-//    private Toast mToast;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,8 +57,11 @@ public class MainActivity extends AppCompatActivity implements ProfileAdapter.Li
 
     }
 
+
+    // This section implements the search functionality for the recycler view
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         MenuItem search = menu.findItem(R.id.search);
@@ -74,9 +75,10 @@ public class MainActivity extends AppCompatActivity implements ProfileAdapter.Li
         return super.onOptionsItemSelected(item);
     }
 
-    private void search(SearchView searchView){
+    // Create and initialize text listerner for the search query
+    private void search(SearchView searchView) {
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -91,21 +93,26 @@ public class MainActivity extends AppCompatActivity implements ProfileAdapter.Li
         });
     }
 
+
     private void retrieveData() {
+        /*
+         This secion is designed to retrieve the user list from Github using the Volley Network
+         library and the result is then parsed into the required Image and Text views
+        */
 
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Retrieving data...");
-        progressDialog.setMessage("Please wait...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setIndeterminate(true);
-        progressDialog.show();
+        // Initialize progress bar reference to the view
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
+        // Initialize progress bar
+        mProgressBar.setVisibility(ProgressBar.VISIBLE);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
                 GIT_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                progressDialog.dismiss();
+
+                // Dismiss the progressbar once the required list is generated.
+                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
