@@ -11,6 +11,8 @@ import android.view.View;
 
 /**
  * Created by Ogunbowale on 8/20/2017.
+ * This class was created to implement the line divided line item for the report
+ * this would help separate the each extracted data in the RecyclerView.
  */
 
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {

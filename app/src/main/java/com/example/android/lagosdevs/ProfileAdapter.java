@@ -3,7 +3,6 @@ package com.example.android.lagosdevs;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,19 +29,19 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.DataView
     private Context context;
     final private ListItemClickListner mOnClickListner;
 
-
+    // click Listener interface
     public interface ListItemClickListner{
         void onListItemClick(int clickedItemIndex);
     }
 
-
+    // Set the Arraylist
     public ProfileAdapter(List<Profiles> profileLists, ListItemClickListner listner) {
         this.profileLists = profileLists;
         this.mFilteredList =  profileLists;
         mOnClickListner = listner;
     }
 
-
+    // inflates view present in the RecyclerView
     @Override
     public DataViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
@@ -56,10 +55,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.DataView
         return dataViewHolder;
     }
 
+    // Bind the data using the getter methods from Profiles
     @Override
     public void onBindViewHolder(DataViewHolder holder, int position) {
-
-        Log.d(TAG, "#" + position);
 
         final Profiles profileList = profileLists.get(position);
         holder.login.setText(profileList.getUserLogin());
@@ -67,9 +65,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.DataView
                 .load(profileList.getUserImage())
                 .placeholder(R.drawable.placeholder)
                 .into(holder.avatar_url);
-
-
-
     }
 
     @Override
@@ -77,6 +72,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.DataView
         return profileLists.size();
     }
 
+    // This method filters the recycler list data based in user input
     @Override
     public Filter getFilter() {
         return new Filter() {
@@ -109,6 +105,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.DataView
         };
     }
 
+    // All required view components are defined here
     public class DataViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener{
 
@@ -123,11 +120,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.DataView
             v.setOnClickListener(this);
         }
 
+        // Click Listener implementation
         @Override
         public void onClick(View v) {
+
+            // Capture the item clicked by the user and put into an intent
             int clickedPosition = getAdapterPosition();
             mOnClickListner.onListItemClick(clickedPosition);
-
             Profiles profiles = profileLists.get(clickedPosition);
             Intent i = new Intent(context, DetailProfile.class);
             i.putExtra(appConstant.API_USER_NAME, profiles.getUserLogin());

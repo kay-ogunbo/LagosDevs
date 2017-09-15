@@ -40,15 +40,10 @@ public class DetailProfile extends AppCompatActivity {
 
 
         super.onCreate(savedInstanceState);
-
-//        //Remove title bar
-//        getSupportActionBar().hide();
-//        //Remove notification bar
-//        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-
         setContentView(R.layout.activity_detail_profile);
 
+
+        // initialize the required views
         profileName = (TextView) findViewById(R.id.profileFullName);
         profileImage  = (CircularImageView) findViewById(R.id.profileUserImg);
         profileUserID = (TextView) findViewById(R.id.profileUserID);
@@ -66,7 +61,7 @@ public class DetailProfile extends AppCompatActivity {
         // Create the user URL by combining the base URL and the selected user IDl
         final String url = appConstant.BASE_URL+ "/users/" + userProfileId;
 
-        // Parse the user id
+        // Parse the user id into the required text view.
         profileUserID.setText("@"+userProfileId);
 
         // Get the user image using picasso library
@@ -84,10 +79,22 @@ public class DetailProfile extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            profileName.setText(response.getString(appConstant.API_NAME));
-                            profileRepos.setText(response.getString(appConstant.API_REPOS));
-                            profileFFs.setText(response.getString(appConstant.API_FOLLOWERS));
-                            profileFollowing.setText(response.getString(appConstant.API_FOLLOWING));
+
+
+                            Profiles usrProfile = new Profiles(response.getString(appConstant.API_NAME), response.getString(appConstant.API_REPOS),
+                                    response.getString(appConstant.API_FOLLOWERS), response.getString(appConstant.API_FOLLOWING));
+
+                            // Add the extracted JSON responses to variables.
+                            String fullName = usrProfile.getProfileFullName();
+                            String repos = usrProfile.getProfileRepos();
+                            String followers = usrProfile.getProfileFFs();
+                            String following = usrProfile.getProfileFollowing();
+
+                            // add the new variables to the corresponding TextViews
+                            profileName.setText(fullName);
+                            profileRepos.setText(repos);
+                            profileFFs.setText(followers);
+                            profileFollowing.setText(following);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -103,7 +110,7 @@ public class DetailProfile extends AppCompatActivity {
     });
         requestQueue.add(objectRequest);
 
-        // URL Listener
+        // Create URL Listener
         profileUserURL.setText(profileURL);
         profileUserURL.setOnClickListener(new View.OnClickListener() {
             @Override

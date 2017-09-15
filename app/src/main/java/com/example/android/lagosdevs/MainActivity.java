@@ -40,10 +40,11 @@ public class MainActivity extends AppCompatActivity implements ProfileAdapter.Li
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        // Set up the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Set up the recycler
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements ProfileAdapter.Li
 
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
+        // Method to retrieve the Githun data using the volley network library
         retrieveData();
 
     }
@@ -96,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements ProfileAdapter.Li
 
     private void retrieveData() {
         /*
-         This secion is designed to retrieve the user list from Github using the Volley Network
+         This section is designed to retrieve the user list from Github using the Volley Network
          library and the result is then parsed into the required Image and Text views
         */
 
@@ -121,8 +123,12 @@ public class MainActivity extends AppCompatActivity implements ProfileAdapter.Li
                         JSONObject jo = array.getJSONObject(i);
                         Profiles usr = new Profiles(jo.getString("login"), jo.getString("avatar_url"),
                                 jo.getString("html_url"));
+
+                        // add the extracted JSON data to the ArrayList
                         profilesLists.add(usr);
                     }
+
+                    // set the adapter to the RecyclerView
                     recyclerView.setAdapter(adapter);
 
 
